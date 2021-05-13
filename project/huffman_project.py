@@ -124,3 +124,17 @@ s1 = coder(exemple, code_long_var_ex)
 #print(s1)
 s2 = decoder(s1, inv_code) 
 print('Le décodage de Huffman pour Hello World est :', s2) 
+
+
+
+def table_frequences(texte):
+#fonction qui renvoie le dictionnaire des occurences du texte d'entrée 
+    table = {}
+    for caractere in texte:
+        if caractere in table:
+            table[caractere] = table[caractere] + 1
+        else:
+            table[caractere] = 1
+    return table
+
+print(table_frequences(exemple))
