@@ -53,7 +53,7 @@ def coder(s, code):
     return s1
 print('Le codage de Huffman pour Hello World : ', coder(exemple,code_long_var_ex))
 print('Le nombre de bits du codage de Huffman pour Hello World est de :' , len(coder(exemple,code_long_var_ex)))
-
+print('Le taux de compression de Hello World avec le codage de Huffman est : ',1-(len(coder(exemple,code_long_var_ex)))/(len(coder_ascii(exemple)))  )
 
 def sous_ascii(): 
     c = {}
@@ -139,7 +139,7 @@ def table_frequences(texte):
             table[caractere] = 1
     return table
 
-print(table_frequences(exemple))
+print('table de fréquence de Hello World ', table_frequences(exemple))
 
 
 def faire_arbre(code): 
@@ -177,11 +177,12 @@ def inserer_arbre(t, a, c):
         t1 = inserer_arbre(droit(t), a, c[1:]) 
         return ['N', gauche(t), t1]
 
-t = faire_arbre(code_long_var_ex)
-print(t)
+t = faire_arbre(code_long_var_ex) #code obtenu "manuellement"
+print('Arbre obtenu avec codage Huffman fait à la main (entrée : code préfixe)', t)
+
 
 def histogramme(u): 
-#fonction qui calcule l'histogramme d'un mot. 
+#fonction qui calcule l'histogramme d'un mot
 # Elle prend en paramètre un mot u et renvoie un dictionnaire qui associe à chaque lettre de u 
 # le nombre d'occurences de celle-ci dans u
     h = {}
@@ -192,6 +193,9 @@ def histogramme(u):
             h[a] = 1
     return h
 
+print('L''histogramme de Hello World : ', histogramme(exemple))
+
+
 def longueur(h, c): 
 #prend en paramètres un histogramme h et un code c. 
 # Elle renvoie l'entier B(c)
@@ -201,7 +205,7 @@ def longueur(h, c):
     return s
 
 def faire_arbre(h, dbg=False): 
-#fonction qui créé l'arbre (non graphique) de Huffman
+#fonction qui créé l'arbre (non graphique) de Huffman, en entrée, elle prend un histogramme
     Q = []
     for a in h:
         heapq.heappush(Q, (h[a], ['F', a]))
@@ -214,8 +218,10 @@ def faire_arbre(h, dbg=False):
         if dbg: print('Étape %d : %s' % (k, Q))
     return heapq.heappop(Q)[1]
 
-t = faire_arbre(histogramme("Hello World"), dbg=True)
-print(t)
+t = faire_arbre(histogramme(exemple), dbg=True)
+#t2 = faire_arbre(histogramme("Le professeur David Albert Huffman (9 août 1925 - 7 octobre 1999) fut un pionnier dans le domaine de l'informatique. Durant toute sa vie, Huffman apporta des contributions importantes à l'étude des machines à états finis. Mais Huffman est principalement connu pour l'invention du codage de Huffman utilisé dans presque toutes les applications qui impliquent la compression et la transmission de données numériques comme les fax, les modems, les réseaux informatiques et la télévision à haute définition."), dbg=True)
+print('Arbre obtenu avec codage de Huffman par histogramme ', t)
+#print(t2)
 
 def faire_codes_aux(t, s): 
     if t[0] == 'F':
@@ -231,8 +237,42 @@ def faire_codes_aux(t, s):
         return c1 
 
 def faire_codes(t):
-#fonction qui créé le code de Huffman
+#fonction qui créé le code de Huffman, en entrée elle prend un arbre
     return faire_codes_aux(t, None)
 
-c = faire_codes(t)
-print(c)
+t = faire_arbre(histogramme("Hello World"), dbg=True)
+s = faire_codes(t)
+print('Le code de Huffman de l''arbre (obtenu avec Histo) ', s)
+#d = faire_code(t2)
+#print(d)
+
+
+def decoder_prefixe(s, t): 
+#Si un code c préfixe et et t son arbre
+# Pour décoder une chaîne s de 0 et de 1, on prend les caractères de s l'un après l'autre. 
+# Si le caractère est un 0, on descend à gauche dans l'arbre. 
+# Si c'est un 1, on descend à droite. 
+# Lorsqu'on atteint une feuille on stocke la lettre qui est à cette feuille et on repart à la racine de l'arbre.
+    t1 = t
+    s1 = ''
+    k = 0
+    while k < len(s):
+        if t1[0] == 'F':
+            s1 = s1 + t1[1]
+            t1 = t
+        elif s[k] == '0':
+            t1 = gauche(t1)
+            k = k+1 
+        else:
+            t1 = droit(t1)
+            k=k+1 
+    return s1+ t1[1]
+
+
+#t = faire_arbre(code_long_var_ex, dbg=True)
+#s = coder(exemple, code_long_var_ex)
+t = faire_arbre(code_long_var_ex)
+s = coder(exemple, code_long_var_ex)
+print('Le codage de la chaine s1 est ',s)
+s1 = decoder_prefixe(s, t)
+print('Le décodage de la chaine s est ', s1)
