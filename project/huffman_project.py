@@ -30,6 +30,8 @@ def coder_ascii(u):
 
 #print(coder_ascii(long))
 #print(len(coder_ascii(long)))
+print('Hello World en code ASCII : ', coder_ascii(exemple))
+print('Le nombre de bits pour Hello World en ASCII est de ', len(coder_ascii(exemple)))
 
 code_long_fixe = {'a': '000', 'b': '001', 'c': '010', 'd' : '011', 'e' : '100', 'f' : '101'}
 code_long_var = {'a': '0', 'b': '101', 'c': '100', 'd' : '111', 'e' : '1101', 'f' : '1100'}
@@ -43,6 +45,9 @@ def coder(s, code):
     for a in s:
         s1 = s1 + code[a]
     return s1
+print('Le codage de Huffman pour Hello World : ', coder(exemple,code_long_var_ex))
+print('Le nombre de bits du codage de Huffman pour Hello World est de :' , len(coder(exemple,code_long_var_ex)))
+
 
 def sous_ascii(): 
     c = {}
@@ -62,7 +67,7 @@ def coder_ascii(u):
 #print(coder('babaca', code_long_fixe))
 #print(coder('babaca', code_long_var))
 #print(coder_ascii('babaca'))
-print(coder(exemple, code_ascii_partiel))
+#print(coder(exemple, code_ascii_partiel))
 
 
 
@@ -84,8 +89,8 @@ def decoder_ascii(s):
     return s1
 
 v = coder_ascii(exemple) 
-print(v)
-print(decoder_ascii(v))
+#print(v)
+print('Le décodage ASCII de Hello World : ',decoder_ascii(v))
 
 def est_prefixe(s1, s2): 
 #fonction qui vérifie si deux chaines de caractère sont préfixes
@@ -93,7 +98,7 @@ def est_prefixe(s1, s2):
     return n <= len(s2) and s2[:n] == s1
 
 
-print(est_prefixe('ab', 'abc'))
+#print(est_prefixe('ab', 'abc'))
 
 def decoder(s, inv_code, dbg=False, pad=0):
 #la fonction prend en paramètres une chaîne de 0 et de 1 et un "code inverse". 
@@ -116,6 +121,6 @@ def decoder(s, inv_code, dbg=False, pad=0):
 inv_code = inverser(code_long_var_ex)
 #s1 = coder('babacadaa', code_long_var) 
 s1 = coder(exemple, code_long_var_ex)
-print(s1)
+#print(s1)
 s2 = decoder(s1, inv_code) 
-print(s2) 
+print('Le décodage de Huffman pour Hello World est :', s2) 
